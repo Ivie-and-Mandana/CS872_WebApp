@@ -8,7 +8,6 @@ using CS872_WebApp.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json;
-using IBM.Data.DB2.Core;
 using MySqlConnector;
 
 namespace CS872_WebApp.DataAccessLayer
@@ -31,7 +30,9 @@ namespace CS872_WebApp.DataAccessLayer
             //this.dbConnectionString.Password = "Oseyi1234";
             //this.dbConnectionString.UserID = "admin";
             //this.dbConnectionString.Server = "cs872.ccd5phonjhwq.us-east-1.rds.amazonaws.com:3306";
-            dbConnectionString.ConnectionString = "Server=cs872.ccd5phonjhwq.us-east-1.rds.amazonaws.com;port=3306;Uid=admin;Pwd=Oseyi1234;";
+            //dbConnectionString.ConnectionString = "Server=cs872.ccd5phonjhwq.us-east-1.rds.amazonaws.com;port=3306;Uid=admin;Pwd=Oseyi1234;";
+            dbConnectionString.ConnectionString = "Server=dbcsproj.ccd5phonjhwq.us-east-1.rds.amazonaws.com;Database=CS872Proj;port=3306;Uid=admin;Pwd=Oseyi1234;";
+            //
 
             this.dbConnection = new MySqlConnection(dbConnectionString.ConnectionString);
             //this.mySqlDataReader = new MySqlDataReader();
@@ -115,52 +116,7 @@ namespace CS872_WebApp.DataAccessLayer
         }
 
 
-        public async void getAccount(string emailAddress)
-        {
-            openDBConnection();
 
-            try
-            {
-                this.dbCommand = dbConnection.CreateCommand();
-
-                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.ACCOUNT WHERE emailAddress = '{0}';", emailAddress);
-
-                mySqlDataReader = (MySqlDataReader)await read_async();
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                closeAndDisposeConnections();
-            }
-        }
-
-
-        public async void getSession(string emailAddress)
-        {
-            openDBConnection();
-
-            try
-            {
-                this.dbCommand = dbConnection.CreateCommand();
-
-                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.SESSION WHERE emailAddress = '{0}';", emailAddress);
-
-                mySqlDataReader = (MySqlDataReader)await read_async();
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                closeAndDisposeConnections();
-            }
-        }
 
         public async void getBill(string emailAddress)
         {
@@ -313,7 +269,7 @@ namespace CS872_WebApp.DataAccessLayer
                     dbCommand = dbConnection.CreateCommand();
 
                     try { 
-                            dbCommand.CommandText = string.Format(@"INSERT INTO `database-1`.`USER` (emailAddress, firstName, lastName, 
+                            dbCommand.CommandText = string.Format(@"INSERT INTO ``.`USER` (emailAddress, firstName, lastName, 
                                                                     fullName, address, city, postalCode, province,  userType,userPassword,userStatus)
                                                                     VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}');",
                                                                     user.emailAddress, user.firstName, user.lastName, user.fullName,
@@ -324,7 +280,11 @@ namespace CS872_WebApp.DataAccessLayer
                     }
                     catch(Exception ex) 
                     {
-                        throw new Exception(ex.Message + " " + "Unable to register User!");
+
+                        //throw new Exception(ex.Message + " " + "Unable to register User!");
+                        response.message = ex.Message + ". Unable to register User!";
+                        response.resultCode = 500;
+                        return response;
                     }
                     finally 
                     { closeAndDisposeConnections(); }

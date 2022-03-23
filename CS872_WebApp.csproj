@@ -10,8 +10,6 @@
 
   <ItemGroup>
 	<PackageReference Include="IBM.Data.DB2.Core-lnx" Version="3.1.0.500" Condition="'$(OS)' == 'UNIX'" />
-	<PackageReference Include="IBM.Data.DB2.Core" Version="3.1.0.400" Condition="'$(OS)' == 'WINDOWS_NT'" />
-	<PackageReference Include="IBM.Data.DB2.Core-lnx" Version="3.1.0.500" />
 	<PackageReference Include="IBM.EntityFrameworkCore" Version="5.0.0.400" />
 	<PackageReference Include="IBM.EntityFrameworkCore-lnx" Version="5.0.0.300" />
 	<PackageReference Include="IbmiXmlserviceStd" Version="1.1.2" />  
@@ -27,10 +25,6 @@
 	</PackageReference>
 	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-	<PackageReference Include="Net.IBM.Data.Db2-lnx" Version="6.0.0.200" />
-	<PackageReference Include="Net5.IBM.Data.Db2-lnx" Version="5.0.0.500" />
-	<PackageReference Include="Npgsql" Version="5.0.12" />
-	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
 	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.4" />
   </ItemGroup>
 

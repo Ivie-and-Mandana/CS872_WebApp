@@ -15,7 +15,7 @@ using CS872_WebApp.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using CS872_WebApp.Models;
 
-namespace WebApplication5
+namespace CS872_WebApp
 {
     public class Startup
     {
@@ -31,7 +31,6 @@ namespace WebApplication5
         {
             services.AddControllersWithViews();
 
-            //services.AddDbContext<RDSDBContext>(opts => { opts.UseNpgsql(Configuration.GetConnectionString("notes_db")); });
             services.AddDbContext<ModelContext>();
             services.AddDbContext<BillDataContext>();
             services.AddDbContext<AdminDataContext>();
