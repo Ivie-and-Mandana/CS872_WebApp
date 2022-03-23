@@ -18,10 +18,11 @@ namespace CS872_WebApp.Models
         [Required]
         [EmailAddress]
         [Display(Name = "Email Address")]
+        [ForeignKey("StandardViewModel")]
         public string emailAddress { get; set; }
 
-        [Required]
-        public string userType { get; set; }
+        //[Required]
+        //public string userType { get; set; }
 
  
         [Required]

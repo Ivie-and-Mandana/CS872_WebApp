@@ -9,31 +9,34 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json;
 using IBM.Data.DB2.Core;
-
+using MySqlConnector;
 
 namespace CS872_WebApp.DataAccessLayer
 {
-    public class DB2DBContext
+    public class MySqlDBContext
     {
-        private DB2ConnectionStringBuilder dbConnectionString; // = "database=alias;uid=userid;pwd=password;";
-        private DB2Connection dbConnection;
-        private DB2Command dbCommand;
-        private DB2DataReader db2DataReader;
+        private MySqlConnectionStringBuilder dbConnectionString; // = "database=alias;uid=userid;pwd=password;";
+        private MySqlConnection dbConnection;
+        private MySqlCommand dbCommand;
+        private MySqlDataReader mySqlDataReader;
         public static bool operationSucceeded;
         public static bool operationFailed;
+        //private MySqlDataReader mySqlDataReader;
+        
 
 
-        public DB2DBContext()
+        public MySqlDBContext()
         {
-            this.dbConnectionString = new DB2ConnectionStringBuilder();
-            this.dbConnectionString.Database = "BLUDB";
-            this.dbConnectionString.Password = "c7nRREgQTvAtBdra";
-            this.dbConnectionString.UserID = "fpz70189";
-            this.dbConnectionString.Server = "b1bc1829-6f45-4cd4-bef4-10cf081900bf.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud:30387";
+            this.dbConnectionString = new MySqlConnectionStringBuilder();
+            //this.dbConnectionString.Password = "Oseyi1234";
+            //this.dbConnectionString.UserID = "admin";
+            //this.dbConnectionString.Server = "cs872.ccd5phonjhwq.us-east-1.rds.amazonaws.com:3306";
+            dbConnectionString.ConnectionString = "Server=cs872.ccd5phonjhwq.us-east-1.rds.amazonaws.com;port=3306;Uid=admin;Pwd=Oseyi1234;";
 
-            this.dbConnection = new DB2Connection(dbConnectionString.ConnectionString);
+            this.dbConnection = new MySqlConnection(dbConnectionString.ConnectionString);
+            //this.mySqlDataReader = new MySqlDataReader();
 
-        }
+            }
 
 
         public void openDBConnection()
@@ -57,9 +60,9 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM FPZ70189.USER WHERE emailAddress = '{0}'", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.USER WHERE emailAddress = '{0}'", emailAddress);
 
-                db2DataReader = (DB2DataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await read_async();
             }
             catch (Exception ex)
             {
@@ -82,16 +85,16 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = "SELECT * FROM FPZ70189.USER;";
+                this.dbCommand.CommandText = "SELECT * FROM CS872.USER;";
 
-                db2DataReader = (DB2DataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await read_async();
 
 
-                while (db2DataReader.Read())
+                while (mySqlDataReader.Read())
                 {
                     for (int i = 0; i <= 1; i++)
                     {
-                        if (!db2DataReader.IsDBNull(i))
+                        if (!mySqlDataReader.IsDBNull(i))
                         {
 
                         }
@@ -120,9 +123,9 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM FPZ70189.ACCOUNT WHERE emailAddress = '{0}';", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.ACCOUNT WHERE emailAddress = '{0}';", emailAddress);
 
-                db2DataReader = (DB2DataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await read_async();
             }
             catch (Exception ex)
             {
@@ -144,9 +147,9 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM FPZ70189.SESSION WHERE emailAddress = '{0}';", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.SESSION WHERE emailAddress = '{0}';", emailAddress);
 
-                db2DataReader = (DB2DataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await read_async();
             }
             catch (Exception ex)
             {
@@ -167,9 +170,9 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM FPZ70189.BILL WHERE emailAddress = '{0}';", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.BILL WHERE emailAddress = '{0}';", emailAddress);
 
-                db2DataReader = (DB2DataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await read_async();
             }
             catch (Exception ex)
             {
@@ -194,11 +197,11 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand(); //.ExecuteNonQuery();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM FPZ70189.BILL WHERE emailAddress = '{0}';", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.BILL WHERE emailAddress = '{0}';", emailAddress);
 
-                db2DataReader = (DB2DataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await read_async();
 
-                bills = mapDBBillsToBillModel(db2DataReader);
+                bills = mapDBBillsToBillModel(mySqlDataReader);
                 operationSucceeded = true;
             }
             catch (Exception ex)
@@ -234,11 +237,11 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM FPZ70189.BILL WHERE emailAddress = '{0}';", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.BILL WHERE emailAddress = '{0}';", emailAddress);
 
-                db2DataReader = (DB2DataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await read_async();
 
-                users = mapDBUsersToUserModel(db2DataReader);
+                users = mapDBUsersToUserModel(mySqlDataReader);
 
                 operationSucceeded = true;
             }
@@ -272,15 +275,15 @@ namespace CS872_WebApp.DataAccessLayer
                 {
                     dbCommand = dbConnection.CreateCommand();
 
-                    dbCommand.CommandText = string.Format("SELECT * FROM FPZ70189.ACCOUNT WHERE password = '{0}' and emailAddress='{1}';", user.password, user.emailAddress);
+                    dbCommand.CommandText = string.Format("SELECT * FROM CS872.USER WHERE password = '{0}' and emailAddress='{1}';", user.userPassword, user.emailAddress);
 
-                    db2DataReader = (DB2DataReader)await read_async();
+                    mySqlDataReader = (MySqlDataReader)await read_async();
 
                     closeAndDisposeConnections();
 
-                    if (db2DataReader.Read())
+                    if (mySqlDataReader.Read())
                     {
-                        LoginViewModel lg = new LoginViewModel() { emailAddress = db2DataReader.GetValue(0).ToString(), password = db2DataReader.GetValue(0).ToString() };
+                        LoginViewModel lg = new LoginViewModel() { emailAddress = mySqlDataReader.GetValue(0).ToString(), userPassword = mySqlDataReader.GetValue(0).ToString() };
                         response.Data = JsonSerializer.Serialize<LoginViewModel>(lg);
                         response.resultCode = 200;
                     }
@@ -309,37 +312,25 @@ namespace CS872_WebApp.DataAccessLayer
                 {
                     dbCommand = dbConnection.CreateCommand();
 
-                    dbCommand.CommandText = string.Format(@"INSERT INTO FPZ70189.USER (emailAddress, firstName, lastName, 
-                                                            fullName, address, city, province, postalCode, userType)
-                                                            VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}');",
-                                                            user.emailAddress, user.firstName, user.lastName, user.fullName,
-                                                            user.address, user.city, user.province, user.postalCode, user.userType);
+                    try { 
+                            dbCommand.CommandText = string.Format(@"INSERT INTO `database-1`.`USER` (emailAddress, firstName, lastName, 
+                                                                    fullName, address, city, postalCode, province,  userType,userPassword,userStatus)
+                                                                    VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}');",
+                                                                    user.emailAddress, user.firstName, user.lastName, user.fullName,
+                                                                    user.address, user.city, user.postalCode, user.province, user.userType, user.userPassword, user.userStatus);
 
-                    int result = await dbCommand.ExecuteNonQueryAsync();
+                            int result = await dbCommand.ExecuteNonQueryAsync();
 
-
-                    dbCommand.CommandText = string.Format(@"INSERT INTO FPZ70189.ACCOUNT ('ACCOUNTID','EMAILADDRESS','PASSWORD',
-                                                                   'STATUS','DATEOPENED','DATECLOSED','LASTMODIFIED')
-                                                          VALUES('{0}','{1}','{2}','{3}','{4}',NULL,NULL );",
-                                                          Guid.NewGuid().ToString(), user.emailAddress, user.password, user.status, DateTime.Now);
-
-
-                    int result2 = await dbCommand.ExecuteNonQueryAsync();
-
-                    closeAndDisposeConnections();
-
-                    if (result == 1 && result2 == 1)
-                    {
-
-                        response.message = "User has been registered!";
-                        response.resultCode = 200;
                     }
-                    else
+                    catch(Exception ex) 
                     {
-                        response.message = "Unable to register User!";
-                        response.resultCode = 500;
+                        throw new Exception(ex.Message + " " + "Unable to register User!");
                     }
+                    finally 
+                    { closeAndDisposeConnections(); }
 
+                    response.message = "User has been registered!";
+                    response.resultCode = 200;
 
                 }
             }
@@ -347,7 +338,7 @@ namespace CS872_WebApp.DataAccessLayer
         }
 
 
-        private List<BillViewModel> mapDBBillsToBillModel(DB2DataReader db2DataReader)
+        private List<BillViewModel> mapDBBillsToBillModel(MySqlDataReader db2DataReader)
         {
             List<BillViewModel> bills = new List<BillViewModel>();
 
@@ -381,7 +372,7 @@ namespace CS872_WebApp.DataAccessLayer
         }
 
 
-        private List<UserViewModel> mapDBUsersToUserModel(DB2DataReader db2DataReader)
+        private List<UserViewModel> mapDBUsersToUserModel(MySqlDataReader db2DataReader)
         {
             List<UserViewModel> users = new List<UserViewModel>();
 
@@ -417,9 +408,9 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = "SELECT * FROM FPZ70189.BILL;";
+                this.dbCommand.CommandText = "SELECT * FROM CS872.BILL;";
 
-                db2DataReader = (DB2DataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await read_async();
             }
             catch (Exception ex)
             {
@@ -434,14 +425,15 @@ namespace CS872_WebApp.DataAccessLayer
 
         private void closeAndDisposeConnections()
         {
-            db2DataReader.Close();
+            if(mySqlDataReader != null)
+                    mySqlDataReader.Close();
             dbCommand.Dispose();
             dbConnection.Close();
         }
 
-        private Task<DbDataReader> read_async()
+        private Task<MySqlDataReader> read_async()
         {
-            return dbCommand.ExecuteReaderAsync();
+            return dbCommand.ExecuteReaderAsync(); //ExecuteReaderAsync();
         }
     }
 }

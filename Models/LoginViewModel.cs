@@ -15,15 +15,11 @@ namespace CS872_WebApp.Models
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string password { get; set; }
+        public string userPassword { get; set; }
 
 
         [Display(Name = "Status")]
-        public string status { get { return "Active" ; } set { value = "Active" ; } }
-
-     
-        [HiddenInput(DisplayValue=false)]
-        public new string userType { get { return "Standard"; } set { value = "Standard"; } }
+        public string userStatus { get; set; }
 
 
     }

@@ -15,10 +15,23 @@
 	<PackageReference Include="IBM.EntityFrameworkCore" Version="5.0.0.400" />
 	<PackageReference Include="IBM.EntityFrameworkCore-lnx" Version="5.0.0.300" />
 	<PackageReference Include="IbmiXmlserviceStd" Version="1.1.2" />  
-	<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.14" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.14" />  
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.14">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>  
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />  
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.12">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
 	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
+	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
 	<PackageReference Include="Net.IBM.Data.Db2-lnx" Version="6.0.0.200" />
 	<PackageReference Include="Net5.IBM.Data.Db2-lnx" Version="5.0.0.500" />
+	<PackageReference Include="Npgsql" Version="5.0.12" />
+	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.4" />
   </ItemGroup>
 
 </Project>

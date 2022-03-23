@@ -15,7 +15,7 @@ namespace CS872_WebApp.Controllers
 {
     public class UserAccountController : Controller
     {
-        DB2DBContext dbContext = new DB2DBContext();
+        MySqlDBContext dbContext = new MySqlDBContext();
 
         // GET: UserAccount
         public ActionResult Index()

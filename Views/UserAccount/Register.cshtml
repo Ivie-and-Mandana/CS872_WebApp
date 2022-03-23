@@ -1,4 +1,4 @@
-﻿@model CS872_WebApp.Models.LoginViewModel
+﻿@model CS872_WebApp.Models.StandardViewModel
 
 
 @{
@@ -12,70 +12,77 @@
 <fieldset>
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })   <!--Enable Data Anotation-->
     <div class="form-group">
-        @Html.LabelFor(m => m.emailAddress, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
+        @Html.LabelFor(m => m.emailAddress, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
             @Html.TextBoxFor(m => m.emailAddress, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.emailAddress, "", new { @class = "text-danger" }) <!Display of Error Notification-->
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.password, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
-            @Html.PasswordFor(m => m.password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })<!Display of Error Notification-->
+        @Html.LabelFor(m => m.userPassword, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
+            @Html.PasswordFor(m => m.userPassword, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.userPassword, "", new { @class = "text-danger" })<!Display of Error Notification-->
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.firstName, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
+        @Html.LabelFor(m => m.firstName, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
             @Html.TextBoxFor(m => m.firstName, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.firstName, "", new { @class = "text-danger" }) <!Display of Error Notification-->
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.lastName, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
+        @Html.LabelFor(m => m.lastName, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
             @Html.TextBoxFor(m => m.lastName, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.lastName, "", new { @class = "text-danger" }) <!Display of Error Notification-->
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.address, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
+        @Html.LabelFor(m => m.address, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
             @Html.TextBoxFor(m => m.address, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.address, "", new { @class = "text-danger" }) <!Display of Error Notification-->
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.city, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
+        @Html.LabelFor(m => m.city, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
             @Html.TextBoxFor(m => m.city, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.city, "", new { @class = "text-danger" }) <!Display of Error Notification-->
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.province, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
+        @Html.LabelFor(m => m.province, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
             @Html.TextBoxFor(m => m.province, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.province, "", new { @class = "text-danger" }) <!Display of Error Notification-->
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.postalCode, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
+        @Html.LabelFor(m => m.postalCode, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
             @Html.TextBoxFor(m => m.postalCode, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.postalCode, "", new { @class = "text-danger" }) <!Display of Error Notification-->
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.userType, new { @class = "col-lg-2 control-label" })
-        <div class="col-lg-10">
+        @Html.LabelFor(m => m.userType, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
             @Html.TextBoxFor(m => m.userType, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.userType, "", new { @class = "text-danger" }) <!Display of Error Notification-->
         </div>
     </div>
+   <div class="form-group">
+        @Html.LabelFor(m => m.userStatus, new { @class = "col-lg-12 control-label" })
+        <div class="col-lg-12">
+            @Html.TextBoxFor(m => m.userStatus, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.userStatus, "", new { @class = "text-danger" }) <!Display of Error Notification-->
+        </div>
+    </div>
     <div class="form-group">
-        <div class="col-lg-10 col-lg-offset-2">
+        <div class="col-lg-12 col-lg-offset-12">
             <button type="submit" class="btn btn-primary">Register</button>
         </div>
     </div>

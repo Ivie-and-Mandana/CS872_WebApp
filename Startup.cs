@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CS872_WebApp.DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
+using CS872_WebApp.Models;
 
 namespace WebApplication5
 {
@@ -27,8 +30,20 @@ namespace WebApplication5
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //services.AddDbContext<RDSDBContext>(opts => { opts.UseNpgsql(Configuration.GetConnectionString("notes_db")); });
+            services.AddDbContext<ModelContext>();
+            services.AddDbContext<BillDataContext>();
+            services.AddDbContext<AdminDataContext>();
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(o => o.LoginPath = new PathString("/UserAccount/lndex"));
+
+            //services.AddDbContext<AdminDataContext>(options =>
+                   // options.UseSqlServer(Configuration.GetConnectionString("AdminDataContext")));
+
+            //services.AddDbContext<BillDataContext>(options =>
+                    //options.UseSqlServer(Configuration.GetConnectionString("BillDataContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

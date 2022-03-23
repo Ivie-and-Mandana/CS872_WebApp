@@ -32,7 +32,7 @@
                         </ul>
                         <ul class="navbar-nav flex-grow-1 pull-right">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UserAccount" asp-action="logout">@User.Identity.Name</a>
+                                <a class="nav-link text-dark" asp-area="" >@User.Identity.Name</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="UserAccount" asp-action="Logout">Logout</a>
@@ -55,6 +55,12 @@
                         <ul class="navbar-nav flex-grow-1 pull-right">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="UserAccount" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminViewModels" asp-action="Login">Admin Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="StandardViewModels" asp-action="Login">User Login</a>
                             </li>
                         </ul>
                      }

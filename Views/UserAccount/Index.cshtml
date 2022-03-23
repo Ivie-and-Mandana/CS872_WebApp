@@ -1,4 +1,4 @@
-﻿@model CS872_WebApp.Models.LoginViewModel
+﻿@model CS872_WebApp.Models.StandardViewModel
 
 
 @{
@@ -20,10 +20,10 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.password, new { @class = "col-lg-2 control-label" })
+                @Html.LabelFor(m => m.userPassword, new { @class = "col-lg-2 control-label" })
                 <div class="col-lg-10">
-                    @Html.PasswordFor(m => m.password, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
+                    @Html.PasswordFor(m => m.userPassword, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.userPassword, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
