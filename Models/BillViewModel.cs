@@ -13,15 +13,16 @@ namespace CS872_WebApp.Models
     public class BillViewModel
     {
         [Key]
-        public Guid billID { get; set; }
+        public int billID { get; set; }
 
         [Required]
         [EmailAddress]
         [Display(Name = "Email Address")]
+        [ForeignKey("StandardViewModel")]
         public string emailAddress { get; set; }
 
-        [Required]
-        public string userType { get; set; }
+        //[Required]
+        //public string userType { get; set; }
 
  
         [Required]

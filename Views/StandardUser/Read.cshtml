@@ -1,0 +1,107 @@
+﻿@model IEnumerable<CS872_WebApp.Models.BillViewModel>
+
+@{
+    ViewData["Title"] = "Read";
+}
+
+<h1>List of All Bills associated to Customer</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.billID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.emailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.billDateTIme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.billStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.houseArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.numberOfRooms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.numberOfChildren)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.numberOfPeople)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isAirCondtion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isTelevision)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isFlat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isUrban)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.billID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.emailAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.billDateTIme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.billStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.houseArea)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numberOfRooms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numberOfChildren)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numberOfPeople)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isAirCondtion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isTelevision)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isFlat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isUrban)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

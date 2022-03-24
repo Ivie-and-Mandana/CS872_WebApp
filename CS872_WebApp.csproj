@@ -1,24 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
-	<TargetFramework>net5.0</TargetFramework>
-	<CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
-	<UserSecretsId>30e28718-7ec7-47cf-9e98-0ac5d45f331a</UserSecretsId>
-	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-	<DockerfileContext>.</DockerfileContext>
+    <TargetFramework>net5.0</TargetFramework>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <UserSecretsId>30e28718-7ec7-47cf-9e98-0ac5d45f331a</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
-
   <ItemGroup>
-	<PackageReference Include="IBM.Data.DB2.Core-lnx" Version="3.1.0.500" Condition="'$(OS)' == 'UNIX'" />
-	<PackageReference Include="IBM.Data.DB2.Core" Version="3.1.0.400" Condition="'$(OS)' == 'WINDOWS_NT'" />
-	<PackageReference Include="IBM.Data.DB2.Core-lnx" Version="3.1.0.500" />
-	<PackageReference Include="IBM.EntityFrameworkCore" Version="5.0.0.400" />
-	<PackageReference Include="IBM.EntityFrameworkCore-lnx" Version="5.0.0.300" />
-	<PackageReference Include="IbmiXmlserviceStd" Version="1.1.2" />  
-	<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.14" />
-	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
-	<PackageReference Include="Net.IBM.Data.Db2-lnx" Version="6.0.0.200" />
-	<PackageReference Include="Net5.IBM.Data.Db2-lnx" Version="5.0.0.500" />
+    <PackageReference Include="IBM.Data.DB2.Core-lnx" Version="3.1.0.500" Condition="'$(OS)' == 'UNIX'" />
+    <PackageReference Include="IBM.EntityFrameworkCore" Version="5.0.0.400" />
+    <PackageReference Include="IBM.EntityFrameworkCore-lnx" Version="5.0.0.300" />
+    <PackageReference Include="IbmiXmlserviceStd" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.ML" Version="1.6.0" />
+    <PackageReference Include="Microsoft.ML.LightGbm" Version="1.6.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.4" />
   </ItemGroup>
-
+  <ItemGroup Label="BillingModel">
+    <None Include="BillingModel.consumption.cs">
+      <DependentUpon>BillingModel.mbconfig</DependentUpon>
+    </None>
+    <None Include="BillingModel.training.cs">
+      <DependentUpon>BillingModel.mbconfig</DependentUpon>
+    </None>
+    <None Include="BillingModel.zip">
+      <DependentUpon>BillingModel.mbconfig</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

@@ -15,14 +15,14 @@ namespace CS872_WebApp.Controllers
 {
     public class UserAccountController : Controller
     {
-        DB2DBContext dbContext = new DB2DBContext();
+        MySqlDBContext dbContext = new MySqlDBContext();
 
-        // GET: UserAccount
+        // GET: StandardViewModel
         public ActionResult Index()
         {
             if(HttpContext.User.Identity.IsAuthenticated) 
             { 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "UserAccount");
             }
             return View();
         }
