@@ -24,9 +24,21 @@ namespace CS872_WebApp.Controllers
         }
 
         // GET: StandardUserController/Details/5
-        public ActionResult Details(string emailAddress)
+        public async Task<ActionResult> Details(BillViewModel model)
         {
-            return View();
+            mySqlDBContext = new MySqlDBContext();
+            var conn = mySqlDBContext.getConnection();
+
+            using (conn)
+            {
+
+                BillViewModel data = await mySqlDBContext.getBill(model);
+                if (data != null)
+                { return View(data); }
+            }
+
+            return null;
+            //return View();
         }
 
         // GET: StandardUserController/Create
@@ -47,7 +59,7 @@ namespace CS872_WebApp.Controllers
 
             using (conn)
             {
-
+                
                 var bill = await mySqlDBContext.getBill(billID); //UpdateBill.Bill.FirstOrDefault(x => x.billID == billID);
 
                 if (bill != null)
@@ -101,8 +113,8 @@ namespace CS872_WebApp.Controllers
 
 
 
-            // GET: StandardUserController/Edit/5
-            public ActionResult Edit(string emailAddress)
+        // GET: StandardUserController/Edit/5
+        public ActionResult Edit(string emailAddress)
         {
             return View();
         }
@@ -110,16 +122,53 @@ namespace CS872_WebApp.Controllers
         // POST: StandardUserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int billID, BillViewModel model)
         {
-            try
+            mySqlDBContext = new MySqlDBContext();
+            var conn = mySqlDBContext.getConnection();
+
+            using (conn)
             {
-                return RedirectToAction(nameof(Index));
+
+                var bill = await mySqlDBContext.getBill(billID); //UpdateBill.Bill.FirstOrDefault(x => x.billID == billID);
+
+                if (bill != null)
+                {
+                    bill.billID = model.billID;
+                    bill.emailAddress = model.emailAddress;
+                    bill.billDateTIme = model.billDateTIme;
+                    bill.amount = model.amount;
+                    bill.houseArea = model.houseArea;
+                    bill.numberOfRooms = model.numberOfRooms;
+                    bill.numberOfChildren = model.numberOfChildren;
+                    bill.numberOfPeople = model.numberOfPeople;
+                    bill.isAirCondtion = model.isAirCondtion;
+                    bill.isTelevision = model.isTelevision;
+                    bill.isFlat = model.isFlat;
+                    bill.isTelevision = model.isTelevision;
+                    bill.isUrban = model.isUrban;
+                    bill.billStatus = model.billStatus;
+
+                    var response = (ResponseModel<string>)await mySqlDBContext.SaveChanges(bill);
+
+                    if (response.resultCode == 200)
+                    {
+                        return RedirectToAction("Read");
+                    }
+
+                }
+
             }
-            catch
-            {
-                return View();
-            }
+
+            return View();
+            //try
+            //{
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
         }
 
         // GET: StandardUserController/Delete/5
@@ -131,16 +180,48 @@ namespace CS872_WebApp.Controllers
         // POST: StandardUserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(string emailAddress, IFormCollection collection)
+        public async Task<ActionResult> Delete(int billID, BillViewModel model)
         {
-            try
+            mySqlDBContext = new MySqlDBContext();
+            var conn = mySqlDBContext.getConnection();
+
+            using (conn)
             {
-                return RedirectToAction(nameof(Index));
+
+                var bill = await mySqlDBContext.getBill(billID); //UpdateBill.Bill.FirstOrDefault(x => x.billID == billID);
+
+                if (bill != null)
+                {
+                    bill.billID = model.billID;
+                    bill.emailAddress = model.emailAddress;
+                    bill.billDateTIme = model.billDateTIme;
+                    bill.amount = model.amount;
+                    bill.houseArea = model.houseArea;
+                    bill.numberOfRooms = model.numberOfRooms;
+                    bill.numberOfChildren = model.numberOfChildren;
+                    bill.numberOfPeople = model.numberOfPeople;
+                    bill.isAirCondtion = model.isAirCondtion;
+                    bill.isTelevision = model.isTelevision;
+                    bill.isFlat = model.isFlat;
+                    bill.isTelevision = model.isTelevision;
+                    bill.isUrban = model.isUrban;
+                    bill.billStatus = model.billStatus;
+
+                    var response = (int) await mySqlDBContext.DeleteBill(bill);
+
+                    if (response == 200)
+                    {
+                        return RedirectToAction("Read");
+                    }
+
+                }
+
             }
-            catch
-            {
-                return View();
-            }
+            return View(model);
+            //try
+            //{
+            //    return RedirectToAction("Read");
+            //}
         }
     }
 }
