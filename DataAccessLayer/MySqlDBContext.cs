@@ -39,10 +39,17 @@ namespace CS872_WebApp.DataAccessLayer
 
             }
 
+        internal Task<BillViewModel> getBill(BillViewModel model)
+        {
+            ResponseModel<string> response = new ResponseModel<string>();
+            throw new NotImplementedException();
+        }
+
         internal MySqlConnection getConnection() => dbConnection;
 
         public void openDBConnection()
         {
+
             try
             {
                 dbConnection.Open();
@@ -54,26 +61,41 @@ namespace CS872_WebApp.DataAccessLayer
         }
 
 
-        public async void getUser(string emailAddress)
+        public async Task<ResponseModel<string>> getUser(string emailAddress)
         {
             openDBConnection();
+            ResponseModel<string> response = new ResponseModel<string>();
+            ///var user;
 
             try
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.USER WHERE emailAddress = '{0}';", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM User WHERE emailAddress = '{0}';", emailAddress);
 
                 mySqlDataReader = (MySqlDataReader)await read_async();
+
+                //if(mySqlDataReader != null)
+                   
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                response.message = ex.Message + ". No active User!";
+                response.resultCode = 500;
+                 
             }
             finally
             {
                 closeAndDisposeConnections();
             }
+            var user = (UserViewModel)mapDBUsersToUserModel(mySqlDataReader)[0];
+            if (user != null)
+            {
+                response.Data = JsonSerializer.Serialize<UserViewModel>(user);
+                response.message = "User has been registered!";
+                response.resultCode = 200;
+            }
+            return response;
         }
 
         internal async Task<ResponseModel<string>> SaveChanges(BillViewModel bill)
@@ -101,7 +123,6 @@ namespace CS872_WebApp.DataAccessLayer
                 //throw new Exception(ex.Message + " " + "Unable to register User!");
                 response.message = ex.Message + ". Unable to register User!";
                 response.resultCode = 500;
-                return response;
             }
             finally
             { closeAndDisposeConnections(); }
@@ -111,43 +132,37 @@ namespace CS872_WebApp.DataAccessLayer
             return response;
         }
 
-        public async void getUsers()
+        public async Task<List<UserViewModel>> getUsers()
         {
             openDBConnection();
 
-            List<string> users = new List<string>();
+            List<UserViewModel> users = new List<UserViewModel>();
+
+            ResponseModel<string> response = new ResponseModel<string>();
+            operationSucceeded = false;
+            operationFailed = false;
 
             try
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = "SELECT * FROM CS872.USER;";
+                this.dbCommand.CommandText = "SELECT * FROM User;";
 
                 mySqlDataReader = (MySqlDataReader)await read_async();
 
+                users = mapDBUsersToUserModel(mySqlDataReader);
 
-                while (mySqlDataReader.Read())
-                {
-                    for (int i = 0; i <= 1; i++)
-                    {
-                        if (!mySqlDataReader.IsDBNull(i))
-                        {
-
-                        }
-
-                    }
-                }
             }
             catch (Exception ex)
             {
-
-                throw new Exception(ex.Message);
+                response.message = ex.Message.ToString();
+                return null;
             }
             finally
             {
                 closeAndDisposeConnections();
             }
-
+            return users;
         }
 
 
@@ -227,7 +242,44 @@ namespace CS872_WebApp.DataAccessLayer
 
         }
 
+        internal async Task<int> DeleteBill(BillViewModel bill)
+        {
+            openDBConnection();
+            ResponseModel<string> response = new ResponseModel<string>();
 
+            List<UserViewModel> users = new List<UserViewModel>();
+            operationSucceeded = false;
+            operationFailed = false;
+            int marker;
+
+            try
+            {
+                this.dbCommand = dbConnection.CreateCommand();
+
+                this.dbCommand.CommandText = String.Format("DELETE FROM Bill WHERE billID = '{0}';", bill.billID);
+
+                marker = (int)await dbCommand.ExecuteNonQueryAsync();
+
+
+                operationSucceeded = true;
+            }
+            catch (Exception ex)
+            {
+                operationFailed = true;
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                closeAndDisposeConnections();
+            }
+
+
+            if (operationSucceeded)
+            {
+                return marker;
+            }
+            return marker;
+        }
 
         public async Task<List<UserViewModel>> getUsers(string emailAddress)
         {
@@ -265,7 +317,7 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 return users;
             }
-            return (null);
+            return null;
         }
 
         public async Task<ResponseModel<string>> login(LoginViewModel user)
