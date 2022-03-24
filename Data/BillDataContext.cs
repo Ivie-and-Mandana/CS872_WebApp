@@ -7,7 +7,7 @@ using CS872_WebApp.Models;
 
 namespace CS872_WebApp.Models
 {
-    public partial class BillDataContext : DbContext
+    public class BillDataContext : DbContext
     {
         public BillDataContext()
         { }
@@ -23,17 +23,17 @@ namespace CS872_WebApp.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("server=dbcsproj.ccd5phonjhwq.us-east-1.rds.amazonaws.com;database=CS872Proj;uid=admin;pwd=Oseyi1234", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.27-mysql"));
+                optionsBuilder.UseMySql("server=dbcsproj.ccd5phonjhwq.us-east-1.rds.amazonaws.com;uid=admin;pwd=Oseyi1234", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.27-mysql"));
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            OnModelCreatingPartial(modelBuilder);
+            OnModelCreating(modelBuilder);
 
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+       // partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
     }
 }

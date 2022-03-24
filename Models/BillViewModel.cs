@@ -13,7 +13,7 @@ namespace CS872_WebApp.Models
     public class BillViewModel
     {
         [Key]
-        public Guid billID { get; set; }
+        public int billID { get; set; }
 
         [Required]
         [EmailAddress]

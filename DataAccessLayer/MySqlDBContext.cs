@@ -39,6 +39,7 @@ namespace CS872_WebApp.DataAccessLayer
 
             }
 
+        internal MySqlConnection getConnection() => dbConnection;
 
         public void openDBConnection()
         {
@@ -61,7 +62,7 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.USER WHERE emailAddress = '{0}'", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.USER WHERE emailAddress = '{0}';", emailAddress);
 
                 mySqlDataReader = (MySqlDataReader)await read_async();
             }
@@ -75,6 +76,40 @@ namespace CS872_WebApp.DataAccessLayer
             }
         }
 
+        internal async Task<ResponseModel<string>> SaveChanges(BillViewModel bill)
+        {
+            ResponseModel<string> response = new ResponseModel<string>();
+
+            openDBConnection();
+
+            try
+            {
+                dbCommand = dbConnection.CreateCommand();
+                dbCommand.CommandText = string.Format(@"UPDATE Bill SET emailAddress = '{0}',billDateTIme = '{1}',amount = '{2}',houseArea = '{3}',numberOfRooms = '{4}',
+                                        numberOfChildren = '{6}',numberOfPeople = '{7}',isAirCondtion = '{8}',isTelevision = '{9}',
+                                        isFlat = '{10}',isUrban = '{11}',billStatus = '{12}' WHERE billID = '{13}';",
+                                        bill.billID, bill.emailAddress, bill.billDateTIme, bill.amount, bill.houseArea, bill.numberOfChildren,
+                                        bill.numberOfPeople, bill.isAirCondtion, bill.isTelevision, bill.isFlat, bill.isUrban, bill.billStatus,
+                                        bill.billID); ;
+
+                int result = await dbCommand.ExecuteNonQueryAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                //throw new Exception(ex.Message + " " + "Unable to register User!");
+                response.message = ex.Message + ". Unable to register User!";
+                response.resultCode = 500;
+                return response;
+            }
+            finally
+            { closeAndDisposeConnections(); }
+
+            response.message = "User has been registered!";
+            response.resultCode = 200;
+            return response;
+        }
 
         public async void getUsers()
         {
@@ -118,27 +153,39 @@ namespace CS872_WebApp.DataAccessLayer
 
 
 
-        public async void getBill(string emailAddress)
+        public async Task<BillViewModel> getBill(int billId)
         {
             openDBConnection();
 
+            BillViewModel bill = new BillViewModel();
+            operationSucceeded = false;
+            operationFailed = false;
+
             try
             {
-                this.dbCommand = dbConnection.CreateCommand();
+                dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.BILL WHERE emailAddress = '{0}';", emailAddress);
+                dbCommand.CommandText = String.Format("SELECT * FROM Bill WHERE billID = '{0}';", billId);
 
-                mySqlDataReader = (MySqlDataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await dbCommand.ExecuteReaderAsync();
+
+                operationSucceeded = true;
             }
             catch (Exception ex)
             {
 
-                throw new Exception(ex.Message);
+                operationFailed = true;
             }
             finally
             {
                 closeAndDisposeConnections();
             }
+
+            if (operationSucceeded)
+            {
+                return bill;
+            }
+            return null;
         }
 
         public async Task<List<BillViewModel>> getBills(string emailAddress)
@@ -146,24 +193,25 @@ namespace CS872_WebApp.DataAccessLayer
             openDBConnection();
 
             List<BillViewModel> bills = new List<BillViewModel>();
+            ResponseModel<string> response = new ResponseModel<string>();
             operationSucceeded = false;
             operationFailed = false;
 
             try
             {
-                this.dbCommand = dbConnection.CreateCommand(); //.ExecuteNonQuery();
+                dbCommand = dbConnection.CreateCommand(); 
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.BILL WHERE emailAddress = '{0}';", emailAddress);
+                dbCommand.CommandText = String.Format("SELECT * FROM Bill WHERE emailAddress = '{0}';", emailAddress);
 
-                mySqlDataReader = (MySqlDataReader)await read_async();
+                mySqlDataReader = (MySqlDataReader)await dbCommand.ExecuteReaderAsync();
 
-                bills = mapDBBillsToBillModel(mySqlDataReader);
+                bills = mapDBBillsToBillModel(mySqlDataReader).ToList<BillViewModel>();
                 operationSucceeded = true;
             }
             catch (Exception ex)
             {
+                response.message = ex.Message + " No bills available for user!";
                 operationFailed = true;
-                throw new Exception(ex.Message);
             }
             finally
             {
@@ -184,6 +232,7 @@ namespace CS872_WebApp.DataAccessLayer
         public async Task<List<UserViewModel>> getUsers(string emailAddress)
         {
             openDBConnection();
+            ResponseModel<string> response = new ResponseModel<string>();
 
             List<UserViewModel> users = new List<UserViewModel>();
             operationSucceeded = false;
@@ -193,7 +242,7 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 this.dbCommand = dbConnection.CreateCommand();
 
-                this.dbCommand.CommandText = String.Format("SELECT * FROM CS872.BILL WHERE emailAddress = '{0}';", emailAddress);
+                this.dbCommand.CommandText = String.Format("SELECT * FROM BILL WHERE emailAddress = '{0}';", emailAddress);
 
                 mySqlDataReader = (MySqlDataReader)await read_async();
 
@@ -226,16 +275,14 @@ namespace CS872_WebApp.DataAccessLayer
             if (user != null)
             {
                 openDBConnection();
-
-                using (dbConnection)
+                try 
                 {
+
                     dbCommand = dbConnection.CreateCommand();
 
-                    dbCommand.CommandText = string.Format("SELECT * FROM CS872.USER WHERE password = '{0}' and emailAddress='{1}';", user.userPassword, user.emailAddress);
+                    dbCommand.CommandText = string.Format("SELECT * FROM User WHERE userPassword = '{0}' and emailAddress='{1}';", user.userPassword, user.emailAddress);
 
-                    mySqlDataReader = (MySqlDataReader)await read_async();
-
-                    closeAndDisposeConnections();
+                    mySqlDataReader = (MySqlDataReader)await dbCommand.ExecuteReaderAsync();
 
                     if (mySqlDataReader.Read())
                     {
@@ -243,14 +290,18 @@ namespace CS872_WebApp.DataAccessLayer
                         response.Data = JsonSerializer.Serialize<LoginViewModel>(lg);
                         response.resultCode = 200;
                     }
-                    else
-                    {
-                        response.message = "User Not Found!";
-                        response.resultCode = 500;
-                    }
-
-
+ 
                 }
+                catch(Exception ex)
+                {
+
+                    response.message = "User Not Found!";
+                    response.resultCode = 500;
+
+                 }
+                finally { closeAndDisposeConnections(); }
+
+
             }
             return response;
         }
@@ -269,10 +320,10 @@ namespace CS872_WebApp.DataAccessLayer
                     dbCommand = dbConnection.CreateCommand();
 
                     try { 
-                            dbCommand.CommandText = string.Format(@"INSERT INTO ``.`USER` (emailAddress, firstName, lastName, 
-                                                                    fullName, address, city, postalCode, province,  userType,userPassword,userStatus)
-                                                                    VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}');",
-                                                                    user.emailAddress, user.firstName, user.lastName, user.fullName,
+                            dbCommand.CommandText = string.Format(@"INSERT INTO User (emailAddress, firstname, lastname, 
+                                                                    address, city, postalCode, province,userType,userPassword,userStatus)
+                                                                    VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}');",
+                                                                    user.emailAddress, user.firstName, user.lastName,
                                                                     user.address, user.city, user.postalCode, user.province, user.userType, user.userPassword, user.userStatus);
 
                             int result = await dbCommand.ExecuteNonQueryAsync();
@@ -297,6 +348,7 @@ namespace CS872_WebApp.DataAccessLayer
             return response;
         }
 
+ 
 
         private List<BillViewModel> mapDBBillsToBillModel(MySqlDataReader db2DataReader)
         {
@@ -307,7 +359,7 @@ namespace CS872_WebApp.DataAccessLayer
             {
                 BillViewModel bill = new BillViewModel();
 
-                bill.billID = (Guid)db2DataReader.GetValue(0);
+                bill.billID = (int) db2DataReader.GetValue(0);
                 bill.emailAddress = db2DataReader.GetValue(1).ToString();
                 bill.billDateTIme = db2DataReader.GetDateTime(2);
                 bill.amount = db2DataReader.GetDecimal(3);
@@ -360,9 +412,10 @@ namespace CS872_WebApp.DataAccessLayer
             return users;
         }
 
-        public async void createBill(BillViewModel bill)
+        public async Task<ResponseModel<string>> createBill(BillViewModel bill)
         {
             openDBConnection();
+            ResponseModel<string> response = new ResponseModel<string>();
 
             try
             {
@@ -375,12 +428,17 @@ namespace CS872_WebApp.DataAccessLayer
             catch (Exception ex)
             {
 
-                throw new Exception(ex.Message);
+                throw ;
+                response.message = ex.Message + " Bill Not Created!";
+                response.resultCode = 500;
             }
             finally
             {
                 closeAndDisposeConnections();
             }
+
+
+            return response;
         }
 
         private void closeAndDisposeConnections()

@@ -17,12 +17,12 @@ namespace CS872_WebApp.Controllers
     {
         MySqlDBContext dbContext = new MySqlDBContext();
 
-        // GET: UserAccount
+        // GET: StandardViewModel
         public ActionResult Index()
         {
             if(HttpContext.User.Identity.IsAuthenticated) 
             { 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "UserAccount");
             }
             return View();
         }
